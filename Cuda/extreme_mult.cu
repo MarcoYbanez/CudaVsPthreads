@@ -64,7 +64,7 @@ int main(){
   clock_gettime(CLOCK_MONOTONIC, &start);
 
   // -- 1 thread per cell multiply<<<1, dim3(4,4)>>>(deviceA_ptr, deviceB_ptr, deviceC_ptr);
-  multiply<<<1, dim3(THREADS, THREADS)>>>(device_MatA, device_MatB, device_MatC, N, THREADS);
+  multiply<<<1, dim3(N,N)>>>(device_MatA, device_MatB, device_MatC, N, THREADS);
   cudaDeviceSynchronize();
 
   cudaMemcpy(C_mat, device_MatC, N*N*sizeof(int), cudaMemcpyDeviceToHost);
