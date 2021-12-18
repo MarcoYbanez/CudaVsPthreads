@@ -31,7 +31,7 @@ for i in range(4):
         times.append(time)
 
     #https://www.geeksforgeeks.org/python-save-list-to-csv/
-    with open("times.csv", 'w') as f:
+    with open("times.csv", 'a') as f:
         write = csv.writer(f)
         
         write.writerow(times)
