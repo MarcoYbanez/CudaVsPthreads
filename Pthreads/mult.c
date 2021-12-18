@@ -12,31 +12,7 @@
   int* C_mat;
 
 void print_Mat(int** M);
-
-
-void* multiply( void* arg ){
-  
-  int work = N/THREADS; //count iterations
-
-  int* thread_id = (int *)arg;
-  
-
-  int i,j,k;
-  for(i = (*thread_id)*work; i < (*thread_id)*work + work; ++i){
-    for(j = 0; j < N; ++j){
-      C_mat[i*N + j] = 0;
-      for(k = 0; k < N; ++k){
-        C_mat[i*N + j] += A_mat[i*N + k] * B_mat[k*N + j];
-      }
-    }
-  }
-
-  thread_id = NULL;
-  free(arg);
-  arg = NULL;
-
-
-}
+void* multiply( void* arg );
 
 int main(){
 
@@ -68,8 +44,8 @@ int main(){
 
   clock_gettime(CLOCK_MONOTONIC, &start);
 
+  //dispatch worker threads
   for(i = 0; i < THREADS; ++i){
-
     int* thread_num = (int*)malloc(sizeof(int));
     *thread_num = i;
     pthread_create(&threads[i], NULL, multiply, (void*)thread_num);
@@ -111,5 +87,27 @@ void print_Mat(int** M){
     }
     printf("\n");
   }
+}
+
+void* multiply( void* arg ){
+  
+  int work = N/THREADS; //count iterations
+
+  int* thread_id = (int *)arg;
+  
+
+  int i,j,k;
+  for(i = (*thread_id)*work; i < (*thread_id)*work + work; ++i){
+    for(j = 0; j < N; ++j){
+      C_mat[i*N + j] = 0;
+      for(k = 0; k < N; ++k){
+        C_mat[i*N + j] += A_mat[i*N + k] * B_mat[k*N + j];
+      }
+    }
+  }
+
+  thread_id = NULL;
+  free(arg);
+  arg = NULL;
 }
 

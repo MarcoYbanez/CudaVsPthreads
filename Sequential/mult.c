@@ -6,10 +6,6 @@
 #define N 1024
 #define DOMAIN 100
 
-// Verify using
-// Freivalds' algorithm
-
-
 void print_Mat(int* M){
 
   int i, j;
@@ -19,8 +15,6 @@ void print_Mat(int* M){
     }
     printf("\n");
   }
-
-
 }
 
 
@@ -45,6 +39,7 @@ int main(){
   }
 
 
+  //start multiplying
   clock_gettime(CLOCK_MONOTONIC, &start);
   for(i = 0; i < N; ++i){
     for(j = 0; j < N; ++j){

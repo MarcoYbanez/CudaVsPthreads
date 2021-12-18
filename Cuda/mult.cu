@@ -62,17 +62,18 @@ int main(){
     }
   }
 
+  //allocate memory on GPU
   cudaMalloc(&device_MatA, N*N*sizeof(int));
   cudaMalloc(&device_MatB, N*N*sizeof(int));
   cudaMalloc(&device_MatC, N*N*sizeof(int));
   
+  //copy host to device array data
   cudaMemcpy(device_MatA, A_mat, N*N*sizeof(int), cudaMemcpyHostToDevice);
   cudaMemcpy(device_MatB, B_mat, N*N*sizeof(int), cudaMemcpyHostToDevice);
   cudaMemcpy(device_MatC, C_mat, N*N*sizeof(int), cudaMemcpyHostToDevice);
 
+  //dispatch worker threads
   clock_gettime(CLOCK_MONOTONIC, &start);
-
-  // -- 1 thread per cell multiply<<<1, dim3(4,4)>>>(deviceA_ptr, deviceB_ptr, deviceC_ptr);
   multiply<<<1, dim3(1, THREADS)>>>(device_MatA, device_MatB, device_MatC, N, THREADS);
   cudaDeviceSynchronize();
 
@@ -94,7 +95,6 @@ int main(){
 */
   printf("Time to complete: %f\n", fin_time);
 
-  // Multiply arrays
   free(A_mat);
   free(B_mat);
   free(C_mat);
